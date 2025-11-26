@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.model.RegisterResponse;
+import com.example.myapplication.util.ProfilePrefs;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -157,6 +158,7 @@ public class RegisterActivity extends AppCompatActivity {
         String password = passwordEditText.getText().toString();
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
+        String email = emailEditText.getText().toString();
 
         if (username.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Uzupełnij wszystkie pola", Toast.LENGTH_SHORT).show();
@@ -169,6 +171,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<RegisterResponse> call, Response<RegisterResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
+                    new ProfilePrefs(RegisterActivity.this).save(firstName, lastName, null,email);
                     Toast.makeText(RegisterActivity.this, response.body().getMessage(), Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(RegisterActivity.this, "Błąd rejestracji", Toast.LENGTH_LONG).show();

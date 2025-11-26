@@ -16,6 +16,8 @@ import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.model.LoginResponse;
 import com.example.myapplication.network.TokenManager;
+import com.example.myapplication.notifications.TokenRepository;
+import com.example.myapplication.util.ProfilePrefs;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +33,8 @@ import androidx.core.content.ContextCompat;
 
 import android.widget.TextView;
 
+import java.util.Map;
+
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText, passwordEditText;
@@ -38,7 +42,6 @@ public class LoginActivity extends AppCompatActivity {
     private ApiService apiService;
 
     private TokenManager tokenManager;
-
 
 
     @Override
@@ -97,11 +100,12 @@ public class LoginActivity extends AppCompatActivity {
 
         Call<LoginResponse> call = apiService.loginUser(email, password);
         call.enqueue(new Callback<LoginResponse>() {
-            @Override
-            public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    String token = response.body().getToken();
+            @Override public void onResponse(Call<LoginResponse> call, Response<LoginResponse> resp) {
+                if (resp.isSuccessful() && resp.body() != null) {
+                    LoginResponse body = resp.body();
+                    String token = resp.body().getToken();
                     tokenManager.saveToken(token);
+                    new ProfilePrefs(LoginActivity.this).save(body.getFirstName(), body.getLastName(), body.getAvatarUrl(), body.getEmail());
                     Toast.makeText(LoginActivity.this, "Zalogowano", Toast.LENGTH_LONG).show();
 
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
@@ -112,9 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Błąd logowania", Toast.LENGTH_LONG).show();
                 }
             }
-
-            @Override
-            public void onFailure(Call<LoginResponse> call, Throwable t) {
+            @Override public void onFailure(Call<LoginResponse> call, Throwable t) {
                 Toast.makeText(LoginActivity.this, "Błąd połączenia: " + t.getMessage(), Toast.LENGTH_LONG).show();
             }
         });

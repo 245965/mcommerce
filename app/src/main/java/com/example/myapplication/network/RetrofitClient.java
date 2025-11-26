@@ -1,5 +1,6 @@
 package com.example.myapplication.network;
 
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
@@ -51,6 +52,9 @@ public class RetrofitClient {
 
                 Request request = requestBuilder.build();
                 okhttp3.Response response = chain.proceed(request);
+                HttpLoggingInterceptor logger = new HttpLoggingInterceptor(msg -> Log.d("HTTP", msg));
+                logger.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+                clientBuilder.addInterceptor(logger);
 
                 if (response.code() == 401) { //usunięto 403, bo powodowało błedy gdy próbował wyświetlić coś do czego nie był uprawniony, ale token jeszcze nie wygasł
                     Log.d("LOGOWANIE", "LOGOWANIE");

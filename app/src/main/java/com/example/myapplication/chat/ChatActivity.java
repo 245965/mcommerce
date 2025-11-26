@@ -16,6 +16,7 @@ import com.example.myapplication.data.MessageDto;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
 import com.example.myapplication.notifications.TokenRepository;
+import com.example.myapplication.util.NavbarUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
         userId  = getIntent().getLongExtra("USER_ID", 1);
 
         api = RetrofitClient.getInstance(this).create(ApiService.class);
+        NavbarUtils.bindAvatar(this, R.id.chatToolbar, "http://10.0.2.2:8080");
 
         rvMessages = findViewById(R.id.rvMessages);
         etMessage  = findViewById(R.id.etMessage);

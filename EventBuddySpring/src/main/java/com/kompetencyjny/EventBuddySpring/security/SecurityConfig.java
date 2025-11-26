@@ -29,8 +29,13 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login","/uploads/**", "/go/**").permitAll()
-                        .requestMatchers("/api/events/with-image").authenticated()
+                        .requestMatchers("/auth/**", "/uploads/**", "/files/**", "/go/**").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/api/users/avatar").authenticated()
+                        .requestMatchers(HttpMethod.PUT,  "/api/users").authenticated()
+                        .requestMatchers(HttpMethod.GET,  "/api/users").authenticated()
+                        .requestMatchers(HttpMethod.GET,  "/api/users/me").authenticated()
+
                         .anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.disable())

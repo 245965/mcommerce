@@ -20,6 +20,8 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
+
+import com.example.myapplication.util.NavbarUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         recyclerView = findViewById(R.id.eventsRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        NavbarUtils.bindAvatar(this, R.id.homeToolbar, "http://10.0.2.2:8080");
         ImageButton moreButton = findViewById(R.id.moreButton);
         moreButton.setOnClickListener(v -> showPopupMenu(v));
         TextView addButton = findViewById(R.id.addEventButton);
@@ -74,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        NavbarUtils.bindAvatar(this, R.id.homeToolbar, "http://10.0.2.2:8080");
         loadEvents(0, 40);
     }
     private void logoutUser() {

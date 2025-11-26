@@ -24,6 +24,7 @@ import com.example.myapplication.network.RetrofitClient;
 
 import com.example.myapplication.budget.BudgetActivity;
 import com.example.myapplication.chat.ChatActivity;
+import com.example.myapplication.util.NavbarUtils;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
@@ -110,6 +111,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
             startActivity(i);
         });
+        NavbarUtils.bindAvatar(this, R.id.detailToolbar, "http://10.0.2.2:8080");
 
         btnOpenChat  = findViewById(R.id.btnOpenChat);
         dateVotingEndInfo = findViewById(R.id.dateVotingEndInfo);

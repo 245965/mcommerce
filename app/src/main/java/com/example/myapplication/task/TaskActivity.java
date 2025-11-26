@@ -20,6 +20,7 @@ import com.example.myapplication.model.PaginatedResponse;
 import com.example.myapplication.model.Task;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.util.NavbarUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class TaskActivity extends AppCompatActivity {
 
         btnAddTask = findViewById(R.id.btnAddTask);
         btnAddTask.setOnClickListener(v -> openAddTaskSheet());
+        NavbarUtils.bindAvatar(this, R.id.taskToolbar, "http://10.0.2.2:8080");
 
         loadTasks();
     }

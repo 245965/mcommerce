@@ -71,6 +71,21 @@ public interface ApiService {
             @Part("event") RequestBody eventJson
     );
 
+    @Multipart
+    @POST("/api/users/avatar")
+    Call<Map<String,String>> uploadAvatar(@Part MultipartBody.Part avatar);
+
+    @FormUrlEncoded
+    @PUT("/api/users")
+    Call<Map<String,String>> updateProfile(
+            @Field("firstName") String firstName,
+            @Field("lastName")  String lastName
+    );
+
+
+    @GET("/api/users")
+    Call<Map<String,String>> me();
+
     @GET("api/events/{eventId}/datePollOptions")
     Call<List<PollOption>> getDatePollOptions(@Path("eventId") Long eventId);
 

@@ -17,6 +17,7 @@ import com.example.myapplication.data.ExpenseDto;
 import com.example.myapplication.event.ExpenseAdapter;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
+import com.example.myapplication.util.NavbarUtils;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.time.LocalDate;
@@ -71,6 +72,7 @@ public class BudgetActivity extends AppCompatActivity {
 
         btnAddExpense.setOnClickListener(v -> openAddExpenseSheet());
         btnShowSettlement.setOnClickListener(v -> showSettlementDialog());
+        NavbarUtils.bindAvatar(this, R.id.budgetToolbar, "http://10.0.2.2:8080");
 
         if (eventId != -1) {
             apiService.getBudgetDeadline(eventId).enqueue(new Callback<String>() {
