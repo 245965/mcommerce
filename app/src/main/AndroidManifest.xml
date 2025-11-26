@@ -3,10 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-
 
     <application
         android:name=".MyApp"
@@ -21,6 +20,11 @@
         android:theme="@style/Theme.MyApplication"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAAsveYnAophLr7K2T52BusZg0jHwvnraY" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_chat_notification" />
@@ -39,7 +43,6 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,13 +50,10 @@
         <activity
             android:name=".EventDetailActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="event"
                     android:pathPattern="/.*"
@@ -61,7 +61,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddEventActivity" />
-
 
         <activity
             android:name=".budget.BudgetActivity"
@@ -81,14 +80,10 @@
 
         <activity android:name=".PaymentActivity" />
 
-
         <receiver android:name=".EventReminderReceiver" />
 
         <activity android:name=".EditProfileActivity" />
 
-
-
-        <!-- Odbiorca wiadomości FCM -->
         <service
             android:name=".notifications.ChatFirebaseMessagingService"
             android:exported="false">
@@ -97,10 +92,6 @@
             </intent-filter>
         </service>
 
-
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>

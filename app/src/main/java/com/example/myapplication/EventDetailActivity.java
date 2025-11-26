@@ -1,3 +1,4 @@
+
 package com.example.myapplication;
 
 import android.app.AlarmManager;
@@ -5,33 +6,37 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.*;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.myapplication.data.EventParticipantDto;
-
 import com.example.myapplication.data.ReminderRequest;
 import com.example.myapplication.model.PollOption;
 import com.example.myapplication.network.ApiService;
 import com.example.myapplication.network.RetrofitClient;
-
 import com.example.myapplication.budget.BudgetActivity;
 import com.example.myapplication.chat.ChatActivity;
 import com.example.myapplication.util.NavbarUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -40,7 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventDetailActivity extends AppCompatActivity {
+public class EventDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     TextView titleText, dateText, descText, locationText;
     ImageView eventImage;
@@ -73,6 +78,7 @@ public class EventDetailActivity extends AppCompatActivity {
 
     private String budgetDeadline;
 
+    private GoogleMap mMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +107,6 @@ public class EventDetailActivity extends AppCompatActivity {
         textAlreadyJoined = findViewById(R.id.textAlreadyJoined);
         layoutParticipants = findViewById(R.id.layoutParticipants);
 
-
-
         btnOpenTasks.setOnClickListener(v -> {
             Intent i = new Intent(EventDetailActivity.this,
                     com.example.myapplication.task.TaskActivity.class);
@@ -113,7 +117,7 @@ public class EventDetailActivity extends AppCompatActivity {
         });
         NavbarUtils.bindAvatar(this, R.id.detailToolbar, "http://10.0.2.2:8080");
 
-        btnOpenChat  = findViewById(R.id.btnOpenChat);
+        btnOpenChat = findViewById(R.id.btnOpenChat);
         dateVotingEndInfo = findViewById(R.id.dateVotingEndInfo);
         locationVotingEndInfo = findViewById(R.id.locationVotingEndInfo);
         LinearLayout shareContainer = findViewById(R.id.shareContainer);
@@ -126,11 +130,10 @@ public class EventDetailActivity extends AppCompatActivity {
             String last = dataIntent.getData().getLastPathSegment();
             try {
                 long deepEventId = Long.parseLong(last);
-
                 dataIntent.putExtra("eventId", deepEventId);
-            } catch (NumberFormatException ignored) {}
+            } catch (NumberFormatException ignored) {
+            }
         }
-
 
         btnOpenChat.setOnClickListener(v -> {
             Intent i = new Intent(this, ChatActivity.class);
@@ -156,7 +159,7 @@ public class EventDetailActivity extends AppCompatActivity {
             showRegulaminDialog(() -> {
                 Log.d("EVENT_JOIN", "Zaakceptowano regulamin");
                 Long eventId = getIntent().getLongExtra("eventId", -1);
-                if (eventId == -1){
+                if (eventId == -1) {
                     Log.d("EVENT_JOIN", "Brakuje eventId lub userId");
                     return;
                 }
@@ -197,10 +200,6 @@ public class EventDetailActivity extends AppCompatActivity {
             builder.show();
         });
 
-
-
-
-
         Long eventId = getIntent().getLongExtra("eventId", -1);
 
         if (eventId != -1) {
@@ -224,6 +223,8 @@ public class EventDetailActivity extends AppCompatActivity {
                         descText.setText(event.getDescription());
                         locationText.setText(event.getLocation());
 
+                        updateMapWithLocation(event.getLocation());
+
                         Glide.with(EventDetailActivity.this)
                                 .load("http://10.0.2.2:8080" + event.getImageUrl())
                                 .into(eventImage);
@@ -246,11 +247,19 @@ public class EventDetailActivity extends AppCompatActivity {
                 }
             });
         }
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.mapFragment);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
     }
 
     private void shareEvent() {
         long eventId = getIntent().getLongExtra("eventId", -1);
-        if (eventId == -1) { /* … */ return; }
+        if (eventId == -1) {
+            return;
+        }
 
         String backendBase = "http://10.0.2.2:8080";
         String link = backendBase + "/go/event/" + eventId;
@@ -261,9 +270,6 @@ public class EventDetailActivity extends AppCompatActivity {
         send.setType("text/plain");
         startActivity(Intent.createChooser(send, "Udostępnij przez"));
     }
-
-
-
 
     private void showRegulaminDialog(Runnable onAccept) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_regulamin, null);
@@ -343,10 +349,10 @@ public class EventDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<String>> call, Throwable t) {}
+            public void onFailure(Call<List<String>> call, Throwable t) {
+            }
         });
     }
-
 
     private void sendPushReminderRequest(int daysBefore) {
         Long eventId = getIntent().getLongExtra("eventId", -1);
@@ -367,7 +373,6 @@ public class EventDetailActivity extends AppCompatActivity {
                     });
             return;
         }
-
 
         ReminderRequest req = new ReminderRequest();
         req.eventId = eventId;
@@ -392,7 +397,6 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-
     private boolean isVotingActive(String endDateString) {
         if (endDateString == null || endDateString.isEmpty()) {
             return true;
@@ -413,8 +417,6 @@ public class EventDetailActivity extends AppCompatActivity {
             return true;
         }
     }
-
-
 
     private void setupVotingOptions() {
 
@@ -527,6 +529,7 @@ public class EventDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     private void fetchUpdatedPollOptions(boolean isDateVote) {
         Long eventId = getIntent().getLongExtra("eventId", -1);
         if (eventId == -1) {
@@ -550,7 +553,6 @@ public class EventDetailActivity extends AppCompatActivity {
 
                     Log.d("PollOptions", "Odebrano " + updatedOptions.size() + " opcji");
 
-
                     if (isDateVote) {
                         datePollOptions = updatedOptions;
                     } else {
@@ -570,7 +572,6 @@ public class EventDetailActivity extends AppCompatActivity {
         });
     }
 
-
     private void showSettlementDialog() {
         Long eventId = getIntent().getLongExtra("eventId", -1);
         if (eventId == -1) {
@@ -584,8 +585,10 @@ public class EventDetailActivity extends AppCompatActivity {
                     StringBuilder sb = new StringBuilder();
                     for (Map.Entry<String, Double> entry : response.body().entrySet()) {
                         double balance = entry.getValue();
-                        if (balance < 0) sb.append(entry.getKey()).append(" ➜ do zapłaty: ").append(-balance).append(" zł\n");
-                        else if (balance > 0) sb.append(entry.getKey()).append(" ➜ do otrzymania: ").append(balance).append(" zł\n");
+                        if (balance < 0)
+                            sb.append(entry.getKey()).append(" ➜ do zapłaty: ").append(-balance).append(" zł\n");
+                        else if (balance > 0)
+                            sb.append(entry.getKey()).append(" ➜ do otrzymania: ").append(balance).append(" zł\n");
                     }
                     new AlertDialog.Builder(EventDetailActivity.this)
                             .setTitle("Rozliczenie")
@@ -596,9 +599,43 @@ public class EventDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Map<String, Double>> call, Throwable t) {}
+            public void onFailure(Call<Map<String, Double>> call, Throwable t) {
+            }
         });
 
     }
 
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+        mMap = googleMap;
+        if (locationText != null && locationText.getText() != null) {
+            String currentLoc = locationText.getText().toString();
+            if (!currentLoc.isEmpty()) {
+                updateMapWithLocation(currentLoc);
+            }
+        }
+    }
+
+    private void updateMapWithLocation(String locationName) {
+        if (mMap == null || locationName == null || locationName.isEmpty()) return;
+
+        new Thread(() -> {
+            Geocoder geocoder = new Geocoder(EventDetailActivity.this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(locationName, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address address = addresses.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+
+                    runOnUiThread(() -> {
+                        mMap.clear();
+                        mMap.addMarker(new MarkerOptions().position(latLng).title(locationName));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f));
+                    });
+                }
+            } catch (IOException e) {
+                Log.e("MAP_ERROR", "Błąd geokodowania: " + e.getMessage());
+            }
+        }).start();
+    }
 }

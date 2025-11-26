@@ -71,4 +71,7 @@ dependencies {
 
 
     implementation "com.stripe:stripe-android:20.50.0"
+
+
+    implementation 'com.google.android.gms:play-services-maps:18.2.0'
 }
