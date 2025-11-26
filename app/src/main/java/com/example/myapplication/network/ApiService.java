@@ -1,5 +1,6 @@
 package com.example.myapplication.network;
 
+import com.example.myapplication.data.ClientSecretResponseDto;
 import com.example.myapplication.data.EventParticipantDto;
 import com.example.myapplication.data.ExpenseDto;
 import com.example.myapplication.data.TaskDto;
@@ -16,9 +17,9 @@ import com.example.myapplication.data.CreateMessageDto;
 import com.example.myapplication.data.MessageDto;
 import com.example.myapplication.data.CreateExpenseDto;
 import com.example.myapplication.model.Task;
-import com.example.myapplication.network.dto.ClientSecretResponse;
 
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -176,5 +177,5 @@ public interface ApiService {
     Call<TaskDto> taskChangeStatus(@Path("taskId") Long taskId, @Query("done") boolean done);
 
     @POST("/api/events/{eventId}/stripe-payment")
-    Call<ClientSecretResponse> createStripePayment(@Path("eventId") Long eventId, @Query("amount") String amount);
+    Call<ClientSecretResponseDto> createStripePayment(@Path("eventId") Long eventId, @Query("amount") BigDecimal amount);
 }

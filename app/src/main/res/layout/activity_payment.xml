@@ -35,24 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"
-            android:text="Kwota (PLN)"
-            android:textColor="@color/text_white"
-            android:textSize="16sp" />
-
-        <EditText
-            android:id="@+id/editTextAmount"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/input_bg"
-            android:hint="np. 49.99"
-            android:inputType="numberDecimal"
-            android:paddingHorizontal="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="6dp"
             android:text="Dane karty"
             android:textColor="@color/text_white"
             android:textSize="16sp" />
@@ -63,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:theme="@style/CardWidgetStyle"
             app:shouldShowPostalCode="false" />
 
         <Button

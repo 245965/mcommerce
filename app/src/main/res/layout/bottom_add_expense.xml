@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nowy wydatek"
+        android:text="Zasil budżet"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         android:textSize="18sp"/>
@@ -53,7 +53,7 @@
         android:id="@+id/btnSaveExpense"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="Zapisz"
+        android:text="Wykonaj Płatność"
         android:layout_gravity="end"
         android:layout_marginTop="16dp"
         android:backgroundTint="#673AB7"

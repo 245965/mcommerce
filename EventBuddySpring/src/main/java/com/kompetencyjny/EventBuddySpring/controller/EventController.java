@@ -279,7 +279,7 @@ public class EventController {
     }
 
     @PostMapping("/{eventId}/stripe-payment")
-    public ResponseEntity<Map<String, String>> createStripePayment(
+    public ResponseEntity<ClientSecretResponseDto> createStripePayment(
             @PathVariable Long eventId,
             @RequestParam BigDecimal amount,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -298,8 +298,11 @@ public class EventController {
         params.put("payment_method_types", List.of("card"));
 
         PaymentIntent intent;
-        try{
+        ClientSecretResponseDto response = new ClientSecretResponseDto();
+
+        try {
             intent = PaymentIntent.create(params);
+
             UserPayment payment = new UserPayment();
             payment.setAmount(amount);
             payment.setCurrency("pln");
@@ -308,13 +311,15 @@ public class EventController {
             payment.setStatus(PaymentStatus.CREATED);
             payment.setStripePaymentIntentId(intent.getId());
             userPaymentRepository.save(payment);
-        }
-        catch(StripeException e){
+
+            response.setClientSecret(intent.getClientSecret());
+        } catch (StripeException e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Stripe payment creation failed"));
+            response.setError("Stripe payment creation failed");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-        return ResponseEntity.ok(Map.of("clientSecret", intent.getClientSecret()));
+
+        return ResponseEntity.ok(response);
     }
 
 }

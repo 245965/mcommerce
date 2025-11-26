@@ -18,7 +18,5 @@
     <string name="stripe_incomplete_expiry_date">Incomplete expiry date</string>
     <string name="stripe_incomplete_card_number">Incomplete card number</string>
     <string name="stripe_incomplete_cvc">Incomplete CVC</string>
-    <!--    DODAĆ KLUCZ OD KAROLA-->
-
-<!--    <string name="stripe_publishable_key">pk_test_XXXXXXXXXXXXXXXXXXXXXXXX</string>-->
+    <string name="stripe_publishable_key">pk_test_51RYuty2eycwVrWGGhHsrLBiPObcS3SIhC6NtMcUMwFz7ImDlk3a6MzP7K2ju6MXDdpJvan2USXIozP80YmiybR4Q00FgdL0sqD</string>
 </resources>

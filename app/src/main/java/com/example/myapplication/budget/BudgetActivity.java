@@ -1,16 +1,19 @@
 package com.example.myapplication.budget;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.myapplication.PaymentActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.data.CreateExpenseDto;
 import com.example.myapplication.data.ExpenseDto;
@@ -142,22 +145,12 @@ public class BudgetActivity extends AppCompatActivity {
 
             CreateExpenseDto dto = new CreateExpenseDto(desc, amt, eventId);
 
-            apiService.addExpense(dto).enqueue(new Callback<ExpenseDto>() {
-                @Override
-                public void onResponse(Call<ExpenseDto> call, Response<ExpenseDto> response) {
-                    if (response.isSuccessful() && response.body() != null) {
-                        adapter.add(response.body());
-                        sheet.dismiss();
-                    } else {
-                        Toast.makeText(BudgetActivity.this, "Błąd dodawania wydatku", Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ExpenseDto> call, Throwable t) {
-                    Toast.makeText(BudgetActivity.this, "Błąd sieci: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            Intent intent = new Intent(BudgetActivity.this, PaymentActivity.class);
+            intent.putExtra("EVENT_ID", eventId);
+            intent.putExtra("EXPENSE_DESC", desc);
+            intent.putExtra("EXPENSE_AMOUNT", amt);
+            startActivityForResult(intent, 1001);
+            sheet.dismiss();
 
         });
 
@@ -200,5 +193,24 @@ public class BudgetActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1001 && resultCode == RESULT_OK) {
+            apiService.getExpensesForEvent(eventId).enqueue(new Callback<List<ExpenseDto>>() {
+                @Override
+                public void onResponse(Call<List<ExpenseDto>> call, Response<List<ExpenseDto>> response) {
+                    if (response.isSuccessful() && response.body() != null) {
+                        adapter.setData(response.body());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<ExpenseDto>> call, Throwable t) { }
+            });
+        }
+    }
+
 
 }

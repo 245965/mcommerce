@@ -19,6 +19,14 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="CardWidgetStyle" parent="@android:style/Theme.DeviceDefault">
+        <item name="editTextStyle">@style/EditTextOverride</item>
+    </style>
+
+    <style name="EditTextOverride" parent="@android:style/Widget.EditText">
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
+
     <string name="app_name">EventBuddy</string>
     <string name="event_date">2025-05-08</string>
     <string name="event_title">test</string>
