@@ -70,6 +70,8 @@ public class EditProfileActivity extends AppCompatActivity {
         tvEmail = findViewById(R.id.tvEmail);
         ivAvatarPreview = findViewById(R.id.ivAvatarPreview);
         tvAvatarInitials = findViewById(R.id.tvAvatarInitials);
+        EditText etFirstName = findViewById(R.id.etFirstName);
+        EditText etLastName = findViewById(R.id.etLastName);
         Button btnSave = findViewById(R.id.btnSave);
         Button btnPick = findViewById(R.id.btnPickPhoto);
 
@@ -95,7 +97,13 @@ public class EditProfileActivity extends AppCompatActivity {
         }
 
         btnPick.setOnClickListener(v -> pickImage.launch("image/*"));
-        btnSave.setOnClickListener(v -> saveChanges());
+        btnSave.setOnClickListener(v -> saveChanges()
+
+
+        );
+
+
+
 
 
     }
@@ -103,16 +111,43 @@ public class EditProfileActivity extends AppCompatActivity {
     private void saveChanges() {
         String first = etFirst.getText().toString().trim();
         String last  = etLast.getText().toString().trim();
+        boolean isValid = true;
 
-        if (first.isEmpty() || last.isEmpty()) {
-            Toast.makeText(this, "Uzupełnij imię i nazwisko", Toast.LENGTH_SHORT).show();
+        //walidacja imie
+        if (first.isEmpty()) {
+            etFirst.setError("Imię jest wymagane");
+            etFirst.requestFocus();
+            isValid = false;
+        } else if (first.length() < 2) {
+            etFirst.setError("Imię jest za krótkie (min. 2 znaki)");
+            etFirst.requestFocus();
+            isValid = false;
+        } else if (!first.matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+")) {
+            etFirst.setError("Imię może zawierać tylko litery");
+            isValid = false;
+        }
+
+
+        if (last.isEmpty()) {
+            etLast.setError("Nazwisko jest wymagane");
+            if (isValid) etLast.requestFocus();
+            isValid = false;
+        } else if (last.length() < 2) {
+            etLast.setError("Nazwisko jest za krótkie (min. 2 znaki)");
+            isValid = false;
+        } else if (!last.matches("[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\\-]+")) {
+            etLast.setError("Nazwisko może zawierać tylko litery i myślnik");
+            isValid = false;
+        }
+
+        if (!isValid) {
             return;
         }
+
 
         if (pickedAvatarUri != null) {
             uploadAvatarThenSaveNames(first, last);
         } else {
-
             updateNames(first, last);
         }
     }
