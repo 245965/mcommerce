@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
 
 
     <application
+        android:name=".MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication"
-        android:networkSecurityConfig="@xml/network_security_config"
-        tools:targetApi="31"
         android:usesCleartextTraffic="true"
-        android:name=".MyApp"
-        >
+        tools:targetApi="31">
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_chat_notification" />
@@ -49,20 +49,23 @@
             android:exported="true">
 
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
 
-                <data android:scheme="myapp"
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
                     android:host="event"
-                    android:pathPattern="/.*"/>
+                    android:pathPattern="/.*"
+                    android:scheme="myapp" />
             </intent-filter>
         </activity>
         <activity android:name=".AddEventActivity" />
 
 
-        <activity android:name=".budget.BudgetActivity"
-              android:exported="false"/>
+        <activity
+            android:name=".budget.BudgetActivity"
+            android:exported="false" />
 
         <activity android:name=".ProfileActivity" />
 
@@ -75,6 +78,10 @@
         <activity
             android:name=".chat.ChatActivity"
             android:exported="true" />
+
+        <activity android:name=".PaymentActivity" />
+
+
         <receiver android:name=".EventReminderReceiver" />
 
         <activity android:name=".EditProfileActivity" />
@@ -92,7 +99,8 @@
 
 
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
 </manifest>

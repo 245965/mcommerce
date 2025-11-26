@@ -16,6 +16,7 @@ import com.example.myapplication.data.CreateMessageDto;
 import com.example.myapplication.data.MessageDto;
 import com.example.myapplication.data.CreateExpenseDto;
 import com.example.myapplication.model.Task;
+import com.example.myapplication.network.dto.ClientSecretResponse;
 
 
 import java.util.List;
@@ -42,16 +43,16 @@ public interface ApiService {
     @FormUrlEncoded
     @POST("/auth/register")
     Call<RegisterResponse> registerUser(
-            @Field("email")     String email,
-            @Field("password")  String password,
+            @Field("email") String email,
+            @Field("password") String password,
             @Field("firstName") String firstName,
-            @Field("lastName")  String lastName
+            @Field("lastName") String lastName
     );
 
     @FormUrlEncoded
     @POST("/auth/login")
     Call<LoginResponse> loginUser(
-            @Field("email")    String email,
+            @Field("email") String email,
             @Field("password") String password
     );
 
@@ -101,7 +102,7 @@ public interface ApiService {
 
     @GET("/api/messages/latest")
     Call<List<MessageDto>> getLatest(@Query("eventId") long eventId,
-                                     @Query("after")  String afterIso);
+                                     @Query("after") String afterIso);
 
     @POST("/api/messages")
     Call<MessageDto> sendMessage(@Body CreateMessageDto body);
@@ -114,7 +115,6 @@ public interface ApiService {
 
     @POST("/api/expenses")
     Call<ExpenseDto> addExpense(@Body CreateExpenseDto dto);
-
 
 
     @GET("/api/events/{eventId}/photos")
@@ -158,6 +158,7 @@ public interface ApiService {
 
     @DELETE("/api/tasks/{taskId}")
     Call<Void> deleteTask(@Path("taskId") Long taskId);
+
     @GET("/api/events/{eventId}/participants")
     Call<List<String>> getEventParticipants(@Path("eventId") long eventId);
 
@@ -169,8 +170,11 @@ public interface ApiService {
     Call<String> getBudgetDeadline(@Path("id") long eventId);
 
     @GET("/api/events/{eventId}/participants")
-    Call<PaginatedResponse<EventParticipantDto>> getEventParticipants(@Path("eventId") Long eventId, @Query("page") int page, @Query("size") int size,  @Query("eventRole") String eventRole );
+    Call<PaginatedResponse<EventParticipantDto>> getEventParticipants(@Path("eventId") Long eventId, @Query("page") int page, @Query("size") int size, @Query("eventRole") String eventRole);
 
     @PUT("/api/tasks/{taskId}/changeStatus")
     Call<TaskDto> taskChangeStatus(@Path("taskId") Long taskId, @Query("done") boolean done);
+
+    @POST("/api/events/{eventId}/stripe-payment")
+    Call<ClientSecretResponse> createStripePayment(@Path("eventId") Long eventId, @Query("amount") String amount);
 }

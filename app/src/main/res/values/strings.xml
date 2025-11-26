@@ -4,4 +4,21 @@
     <string name="chat">Chat</string>
     <string name="tasks">Zadania</string>
     <string name="task_choose_assignee">Wybierz uczestnika wydarzenia</string>
+
+
+    <string name="stripe_card_number_hint">Card number</string>
+    <string name="stripe_expiry_date_hint">MM/YY</string>
+    <string name="stripe_cvc_number_hint">CVC</string>
+    <string name="stripe_postal_code">Postal code</string>
+
+    <string name="stripe_invalid_card_number">Invalid card number</string>
+    <string name="stripe_invalid_cvc">Invalid CVC</string>
+    <string name="stripe_invalid_expiry_year">Invalid year</string>
+    <string name="stripe_invalid_expiry_month">Invalid month</string>
+    <string name="stripe_incomplete_expiry_date">Incomplete expiry date</string>
+    <string name="stripe_incomplete_card_number">Incomplete card number</string>
+    <string name="stripe_incomplete_cvc">Incomplete CVC</string>
+    <!--    DODAĆ KLUCZ OD KAROLA-->
+
+<!--    <string name="stripe_publishable_key">pk_test_XXXXXXXXXXXXXXXXXXXXXXXX</string>-->
 </resources>

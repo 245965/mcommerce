@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- HINTY/PODPISY używane przez CardMultilineWidget -->
+    <string name="stripe_card_number_hint">Numer karty</string>
+    <string name="stripe_expiry_date_hint">MM/RR</string>
+    <string name="stripe_cvc_number_hint">CVC</string>
+    <string name="stripe_postal_code">Kod pocztowy</string>
+
+    <!-- (opcjonalnie) komunikaty walidacyjne -->
+    <string name="stripe_invalid_card_number">Nieprawidłowy numer karty</string>
+    <string name="stripe_invalid_cvc">Nieprawidłowy kod CVC</string>
+    <string name="stripe_invalid_expiry_year">Nieprawidłowy rok</string>
+    <string name="stripe_invalid_expiry_month">Nieprawidłowy miesiąc</string>
+    <string name="stripe_incomplete_expiry_date">Niepełna data ważności</string>
+    <string name="stripe_incomplete_card_number">Niepełny numer karty</string>
+    <string name="stripe_incomplete_cvc">Niepełny kod CVC</string>
+</resources>
