@@ -47,7 +47,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/input_bg"
-            android:hint="Value"
+            android:hint="Email"
             android:paddingHorizontal="16dp" />
 
         <TextView
@@ -64,7 +64,7 @@
             android:layout_height="48dp"
             android:layout_marginBottom="16dp"
             android:background="@drawable/input_bg"
-            android:hint="Value"
+            android:hint="Hasło"
             android:inputType="textPassword"
             android:paddingHorizontal="16dp" />
 

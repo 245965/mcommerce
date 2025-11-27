@@ -94,8 +94,6 @@ public class TaskActivity extends AppCompatActivity {
             }
         });
     }
-
-    /** Pobiera zadania z backendu */
     private void loadTasks() {
         api.getEventsTasks(0, 40, eventId).enqueue(new Callback<PaginatedResponse<TaskDto>>() {
             @Override

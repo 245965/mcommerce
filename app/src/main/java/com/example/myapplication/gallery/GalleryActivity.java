@@ -35,10 +35,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Wyświetla zdjęcia wydarzenia w ViewPager2 i pozwala dodać nowe.
- * EXTRA:  Intent.putExtra("EVENT_ID", long)
- */
 public class GalleryActivity extends AppCompatActivity {
 
     private ViewPager2 viewPager;

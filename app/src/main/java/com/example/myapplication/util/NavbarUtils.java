@@ -30,7 +30,6 @@ public final class NavbarUtils {
         ImageView img = root.findViewById(R.id.avatarImage);
         TextView  tv  = root.findViewById(R.id.avatarInitials);
 
-        // klik = otwarcie profilu
         View.OnClickListener openProfile = v ->
                 activity.startActivity(new Intent(activity, ProfileActivity.class));
 

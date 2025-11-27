@@ -56,11 +56,10 @@ public class RetrofitClient {
                 logger.setLevel(HttpLoggingInterceptor.Level.HEADERS);
                 clientBuilder.addInterceptor(logger);
 
-                if (response.code() == 401) { //usunięto 403, bo powodowało błedy gdy próbował wyświetlić coś do czego nie był uprawniony, ale token jeszcze nie wygasł
+                if (response.code() == 401) {
                     Log.d("LOGOWANIE", "LOGOWANIE");
                     tokenManager.clearToken();
 
-                    // Przekieruj użytkownika do LoginActivity
                     new android.os.Handler(android.os.Looper.getMainLooper()).post(() -> {
                         Intent intent = new Intent(context, com.example.myapplication.LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

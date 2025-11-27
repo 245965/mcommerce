@@ -221,9 +221,24 @@ public class EventDetailActivity extends AppCompatActivity implements OnMapReady
                         titleText.setText(event.getTitle());
                         dateText.setText(event.getDate());
                         descText.setText(event.getDescription());
-                        locationText.setText(event.getLocation());
+                        String loc = event.getLocation();
+                        locationText.setText(loc);
 
-                        updateMapWithLocation(event.getLocation());
+                        View mapContainer = findViewById(R.id.mapContainer);
+
+
+                        TextView locationHeader = findViewById(R.id.locationHeader);
+
+                        if (loc == null || loc.trim().isEmpty()) {
+                            mapContainer.setVisibility(View.GONE);
+                            locationHeader.setVisibility(View.GONE);
+                        } else {
+                            mapContainer.setVisibility(View.VISIBLE);
+                            locationHeader.setVisibility(View.VISIBLE);
+                            updateMapWithLocation(loc);
+                        }
+
+
 
                         Glide.with(EventDetailActivity.this)
                                 .load("http://10.0.2.2:8080" + event.getImageUrl())
